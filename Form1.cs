@@ -7,6 +7,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using System.IO;
+using System.Drawing.Imaging;
 
 namespace WindowsFormsApplication2
 {
@@ -74,6 +76,24 @@ namespace WindowsFormsApplication2
         private void greenToolStripMenuItem_Click(object sender, EventArgs e)
         {
             f.SelectedTools("ImageColorGreen");
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            f.SelectedTools("Save");
+            if(saveFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                f.bmp.Save(saveFileDialog1.FileName, ImageFormat.Jpeg);
+                f.filename = saveFileDialog1.FileName;
+            }
+        }
+
+        private void saveToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (f.filename != null)
+                f.bmp.Save(f.filename, ImageFormat.Jpeg);
+            else
+                saveAsToolStripMenuItem_Click(sender, e);
         }
     }
 }

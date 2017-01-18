@@ -17,6 +17,7 @@ namespace WindowsFormsApplication2
         private int _widthImg, _heightImg;
 
         private ResizeImageForms rif = new ResizeImageForms();
+        public Bitmap bmp;
 
         public Form2()
         {
@@ -30,15 +31,18 @@ namespace WindowsFormsApplication2
             pictureBox1.Refresh();
         }
 
-        //private void Form2_FormClosing(object sender, FormClosingEventArgs e)
-        //{
-        //    this.Close();
-        //}
+        public void SaveImage()
+        {
+            bmp = new Bitmap(pictureBox1.Image, _widthImg, _heightImg);
+        }
         /*----------------------- Menu item -----------------------------*/
         public void SelectedTools(string toolType)
         {
             switch (toolType)
             {
+                case "Save":
+                    SaveImage();
+                    break;
                 case "ResizeImage":
                     ResizeImage();
                     break;
