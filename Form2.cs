@@ -8,16 +8,22 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
+using System.Drawing.Imaging;
 
 namespace WindowsFormsApplication2
 {
     public partial class Form2 : Form
     {
-        public string filename { get; set; }
-        private int _widthImg, _heightImg;
+        public  string   filename { get; set; }
+        private int     _widthImg, _heightImg;
 
-        private ResizeImageForms rif = new ResizeImageForms();
-        public Bitmap bmp;
+        private ResizeImageForms rif;
+        public  Bitmap           bmp;
+
+        public int          widthImage;
+        public int          heightImage;
+        public string       filenameImage;
+        public bool         isCreating = false;
 
         public Form2()
         {
@@ -26,9 +32,23 @@ namespace WindowsFormsApplication2
 
         private void Form2_Load(object sender, EventArgs e)
         {
-            this.Text = filename;
-            pictureBox1.Image = Image.FromStream(new MemoryStream(File.ReadAllBytes(filename)));
-            pictureBox1.Refresh();
+            rif = new ResizeImageForms();
+            if (isCreating)
+            {
+                this.Text = filenameImage;
+                pictureBox1.BackColor       = Color.White;
+                pictureBox1.Size            = new System.Drawing.Size(widthImage, heightImage);
+                pictureBox1.BorderStyle     = BorderStyle.Fixed3D;
+                pictureBox1.SizeMode        = PictureBoxSizeMode.StretchImage;
+                pictureBox1.Dock            = DockStyle.None;
+                pictureBox1.Refresh();
+            }
+            else
+            {
+                this.Text           = filename;
+                pictureBox1.Image   = Image.FromStream(new MemoryStream(File.ReadAllBytes(filename)));
+                pictureBox1.Refresh();
+            }            
         }
 
         public void SaveImage()
@@ -72,19 +92,21 @@ namespace WindowsFormsApplication2
         private void ResizeImage()
         {
             rif.ShowDialog();
-            _widthImg = Convert.ToInt32(rif.widthImg);
-            _heightImg = Convert.ToInt32(rif.heightImg);
-            pictureBox1.Size = new System.Drawing.Size(_widthImg, _heightImg);
+
+            _widthImg               = Convert.ToInt32(rif.widthImg);
+            _heightImg              = Convert.ToInt32(rif.heightImg);
+            pictureBox1.Size        = new System.Drawing.Size(_widthImg, _heightImg);
             pictureBox1.BorderStyle = BorderStyle.Fixed3D;
-            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
-            pictureBox1.Dock = DockStyle.None;
+            pictureBox1.SizeMode    = PictureBoxSizeMode.StretchImage;
+            pictureBox1.Dock        = DockStyle.None;
+
             pictureBox1.Refresh();
         }
 
         private void ImageColors(string colors)
         {
-            Image img = pictureBox1.Image;
-            System.Drawing.Imaging.ImageAttributes imageAttrs = new System.Drawing.Imaging.ImageAttributes();
+            Image img                   = pictureBox1.Image;
+            ImageAttributes imageAttrs  = new ImageAttributes();
 
             switch (colors)
             {
@@ -121,66 +143,66 @@ namespace WindowsFormsApplication2
         private System.Drawing.Imaging.ColorMatrix CreateBlackAndWhiteMatrix()
         {
             return new System.Drawing.Imaging.ColorMatrix(new float[][]{
-                    new float[] { 0.299f, 0.299f, 0.299f, 0, 0 },
-                    new float[] { 0.587f, 0.587f, 0.587f, 0, 0 },
-                    new float[] { 0.114f, 0.114f, 0.114f, 0, 0 },
-                    new float[] {   0,    0,    0, 1, 0},
-                    new float[] {   0,    0,    0, 0, 1}
+                   new float[] { 0.299f, 0.299f, 0.299f, 0, 0 },
+                   new float[] { 0.587f, 0.587f, 0.587f, 0, 0 },
+                   new float[] { 0.114f, 0.114f, 0.114f, 0, 0 },
+                   new float[] { 0, 0, 0, 1, 0 },
+                   new float[] { 0, 0, 0, 0, 1 }
             });
         }
 
         private System.Drawing.Imaging.ColorMatrix CreateSepiaMatrix()
         {
             return new System.Drawing.Imaging.ColorMatrix(new float[][]{
-                    new float[] {0.396f, 0.349f, 0.272f, 0, 0},
-                    new float[] {0.769f, 0.686f, 0.534f, 0, 0},
-                    new float[] {0.189f, 0.168f, 0.131f, 0, 0},
-                    new float[] {   0,    0,    0, 1, 0},
-                    new float[] {   0,    0,    0, 0, 1}
+                   new float[] { 0.396f, 0.349f, 0.272f, 0, 0 },
+                   new float[] { 0.769f, 0.686f, 0.534f, 0, 0 },
+                   new float[] { 0.189f, 0.168f, 0.131f, 0, 0 },
+                   new float[] { 0, 0, 0, 1, 0 },
+                   new float[] { 0, 0, 0, 0, 1 }
             });
         }
 
         private System.Drawing.Imaging.ColorMatrix CreateNegativMatrix()
         {
             return new System.Drawing.Imaging.ColorMatrix(new float[][]{
-                    new float[] {-1, 0, 0, 0, 0},
-                    new float[] {0, -1, 0, 0, 0},
-                    new float[] {0, 0, -1, 0, 0},
-                    new float[] {0, 0, 0, 1, 0},
-                    new float[] {1, 1, 1, 0, 1}
+                   new float[] { -1, 0, 0, 0, 0 },
+                   new float[] { 0, -1, 0, 0, 0 },
+                   new float[] { 0, 0, -1, 0, 0 },
+                   new float[] { 0, 0, 0, 1, 0  },
+                   new float[] { 1, 1, 1, 0, 1  }
             });
         }
 
         private System.Drawing.Imaging.ColorMatrix CreateRedMatrix()
         {
             return new System.Drawing.Imaging.ColorMatrix(new float[][]{
-                    new float[] {1, 0, 0, 0, 0},
-                    new float[] {0, 0, 0, 0, 0},
-                    new float[] {0, 0, 0, 0, 0},
-                    new float[] {0, 0, 0, 1, 0},
-                    new float[] {0, 0, 0, 0, 1}
+                   new float[] { 1, 0, 0, 0, 0 },
+                   new float[] { 0, 0, 0, 0, 0 },
+                   new float[] { 0, 0, 0, 0, 0 },
+                   new float[] { 0, 0, 0, 1, 0 },
+                   new float[] { 0, 0, 0, 0, 1 }
             });
         }
 
         private System.Drawing.Imaging.ColorMatrix CreateGreenMatrix()
         {
             return new System.Drawing.Imaging.ColorMatrix(new float[][]{
-                    new float[] {0, 0, 0, 0, 0},
-                    new float[] {0, 1, 0, 0, 0},
-                    new float[] {0, 0, 0, 0, 0},
-                    new float[] {0, 0, 0, 1, 0},
-                    new float[] {0, 0, 0, 0, 1}
+                   new float[] { 0, 0, 0, 0, 0 },
+                   new float[] { 0, 1, 0, 0, 0 },
+                   new float[] { 0, 0, 0, 0, 0 },
+                   new float[] { 0, 0, 0, 1, 0 },
+                   new float[] { 0, 0, 0, 0, 1 }
             });
         }
 
         private System.Drawing.Imaging.ColorMatrix CreateBlueMatrix()
         {
             return new System.Drawing.Imaging.ColorMatrix(new float[][]{
-                    new float[] {0, 0, 0, 0, 0},
-                    new float[] {0, 0, 0, 0, 0},
-                    new float[] {0, 0, 1, 0, 0},
-                    new float[] {0, 0, 0, 1, 0},
-                    new float[] {0, 0, 0, 0, 1}
+                   new float[] { 0, 0, 0, 0, 0 },
+                   new float[] { 0, 0, 0, 0, 0 },
+                   new float[] { 0, 0, 1, 0, 0 },
+                   new float[] { 0, 0, 0, 1, 0 },
+                   new float[] { 0, 0, 0, 0, 1 }
             });
         }
     }
