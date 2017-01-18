@@ -67,9 +67,14 @@ namespace WindowsFormsApplication2
         /*------------------- Redact image function ---------------------*/
         private void ResizeImage()
         {
-            rif.Show();
+            rif.ShowDialog();
             _widthImg = Convert.ToInt32(rif.widthImg);
             _heightImg = Convert.ToInt32(rif.heightImg);
+            pictureBox1.Size = new System.Drawing.Size(_widthImg, _heightImg);
+            pictureBox1.BorderStyle = BorderStyle.Fixed3D;
+            pictureBox1.SizeMode = PictureBoxSizeMode.StretchImage;
+            pictureBox1.Dock = DockStyle.None;
+            pictureBox1.Refresh();
         }
 
         private void ImageColors(string colors)
