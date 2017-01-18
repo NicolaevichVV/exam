@@ -105,5 +105,14 @@ namespace WindowsFormsApplication2
             else
                 saveAsToolStripMenuItem_Click(sender, e);
         }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            if (openFileDialog1.ShowDialog() == DialogResult.OK)
+            {
+                f.filename = openFileDialog1.FileName;
+                f.SelectedTools("LoadImage");
+            }
+        }
     }
 }

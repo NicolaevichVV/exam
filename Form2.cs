@@ -24,6 +24,7 @@ namespace WindowsFormsApplication2
         public int          heightImage;
         public string       filenameImage;
         public bool         isCreating = false;
+        //public bool         imageLoad = false;
 
         public Form2()
         {
@@ -35,7 +36,7 @@ namespace WindowsFormsApplication2
             rif = new ResizeImageForms();
             if (isCreating)
             {
-                this.Text = filenameImage;
+                this.Text                   = filenameImage;
                 pictureBox1.BackColor       = Color.White;
                 pictureBox1.Size            = new System.Drawing.Size(widthImage, heightImage);
                 pictureBox1.BorderStyle     = BorderStyle.Fixed3D;
@@ -83,6 +84,10 @@ namespace WindowsFormsApplication2
                     break;
                 case "ImageColorBlue":
                     ImageColors("Blue");
+                    break;
+                case "LoadImage":
+                    pictureBox1.Image = Image.FromStream(new MemoryStream(File.ReadAllBytes(filename)));
+                    pictureBox1.Refresh();
                     break;
                 default:
                     break;
